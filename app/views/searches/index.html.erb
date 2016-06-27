@@ -1,0 +1,272 @@
+<h1>Eventful Touring Map<small> by Carli Martinez</small></h1>
+<br>
+<%= form_for @search, url: searches_path, html: {class: "search-form", :multipart => true} do |f| %>
+      <%= f.label :name %> <%= f.text_field :name %>
+      <%= f.submit %>
+<% end %>
+
+<% arr = [] %>
+
+<% @searches.each do |search| %>
+  <% arr.push(search.name) %>
+<% end %>
+
+<h1><%= keyword = arr[-1].to_s %></h1>
+<%
+ require 'rubygems'
+ require 'eventful/api'
+
+ result = " "
+ # First, create our Eventful::API object
+ eventful = Eventful::API.new 'xxxxxxx'
+
+   # This is the cool part!
+   results = eventful.call 'events/search',
+                           :keywords => keyword,
+                           :location => "Arizona",
+                           :date => "Future",
+                           :page_number => 1
+
+   # If we couldn't find anything, ask the user again
+   if results['events'].nil? then
+     result += "Hmm. I couldn't find anything. Sorry."
+   end
+
+   # Output the results
+   results['events']['event'].each do |event|
+    #  result += "http://eventful.com/events/" + event['id']
+     result += event['title']
+     result += "  at " + event['venue_name']
+     result += "  on " + event['start_time'].to_s
+     result += "________"
+   end
+ %>
+
+<div id="container" style="position: relative; width: 1000px; height: 600px;"></div>
+
+<script>
+    var map = new Datamap({
+        element: document.getElementById('container'),
+        scope: 'usa',
+        geographyConfig: {
+        highlightBorderColor: '#bada55',
+       popupTemplate: function(geography, data) {
+          return '<div class="hoverinfo">Squids'
+        },
+        highlightBorderWidth: 3
+      },
+        fills: {
+        'No Events': '#CC4731',
+        'Event(s)': '#306596',
+        'Heavy Event(s)': '#667FAF',
+        'Light Event(s)': '#A9C0DE',
+        'Heavy No Events': '#CA5E5B',
+        'Light No Events': '#EAA9A8',
+        defaultFill: '#00000'
+      },
+      data:{
+      "AZ": {
+          "fillKey": "No Events",
+          "electoralVotes": 5
+      },
+      "CO": {
+          "fillKey": "Light Event(s)",
+          "electoralVotes": 5
+      },
+      "DE": {
+          "fillKey": "Event(s)",
+          "electoralVotes": 32
+      },
+      "FL": {
+          "fillKey": "UNDECIDED",
+          "electoralVotes": 29
+      },
+      "GA": {
+          "fillKey": "No Events",
+          "electoralVotes": 32
+      },
+      "HI": {
+          "fillKey": "Event(s)",
+          "electoralVotes": 32
+      },
+      "ID": {
+          "fillKey": "No Events",
+          "electoralVotes": 32
+      },
+      "IL": {
+          "fillKey": "Event(s)",
+          "electoralVotes": 32
+      },
+      "IN": {
+          "fillKey": "No Events",
+          "electoralVotes": 11
+      },
+      "IA": {
+          "fillKey": "Light Event(s)",
+          "electoralVotes": 11
+      },
+      "KS": {
+          "fillKey": "No Events",
+          "electoralVotes": 32
+      },
+      "KY": {
+          "fillKey": "No Events",
+          "electoralVotes": 32
+      },
+      "LA": {
+          "fillKey": "No Events",
+          "electoralVotes": 32
+      },
+      "MD": {
+          "fillKey": "Event(s)",
+          "electoralVotes": 32
+      },
+      "ME": {
+          "fillKey": "Event(s)",
+          "electoralVotes": 32
+      },
+      "MA": {
+          "fillKey": "Event(s)",
+          "electoralVotes": 32
+      },
+      "MN": {
+          "fillKey": "Event(s)",
+          "electoralVotes": 32
+      },
+      "MI": {
+          "fillKey": "Event(s)",
+          "electoralVotes": 32
+      },
+      "MS": {
+          "fillKey": "No Events",
+          "electoralVotes": 32
+      },
+      "MO": {
+          "fillKey": "No Events",
+          "electoralVotes": 13
+      },
+      "MT": {
+          "fillKey": "No Events",
+          "electoralVotes": 32
+      },
+      "NC": {
+          "fillKey": "Light No Events",
+          "electoralVotes": 32
+      },
+      "NE": {
+          "fillKey": "No Events",
+          "electoralVotes": 32
+      },
+      "NV": {
+          "fillKey": "Heavy Event(s)",
+          "electoralVotes": 32
+      },
+      "NH": {
+          "fillKey": "Light Event(s)",
+          "electoralVotes": 32
+      },
+      "NJ": {
+          "fillKey": "Event(s)",
+          "electoralVotes": 32
+      },
+      "NY": {
+          "fillKey": "Event(s)",
+          "electoralVotes": 32
+      },
+      "ND": {
+          "fillKey": "No Events",
+          "electoralVotes": 32
+      },
+      "NM": {
+          "fillKey": "Event(s)",
+          "electoralVotes": 32
+      },
+      "OH": {
+          "fillKey": "UNDECIDED",
+          "electoralVotes": 32
+      },
+      "OK": {
+          "fillKey": "No Events",
+          "electoralVotes": 32
+      },
+      "OR": {
+          "fillKey": "Event(s)",
+          "electoralVotes": 32
+      },
+      "PA": {
+          "fillKey": "Event(s)",
+          "electoralVotes": 32
+      },
+      "RI": {
+          "fillKey": "Event(s)",
+          "electoralVotes": 32
+      },
+      "SC": {
+          "fillKey": "No Events",
+          "electoralVotes": 32
+      },
+      "SD": {
+          "fillKey": "No Events",
+          "electoralVotes": 32
+      },
+      "TN": {
+          "fillKey": "No Events",
+          "electoralVotes": 32
+      },
+      "TX": {
+          "fillKey": "No Events",
+          "electoralVotes": 32
+      },
+      "UT": {
+          "fillKey": "No Events",
+          "electoralVotes": 32
+      },
+      "WI": {
+          "fillKey": "Event(s)",
+          "electoralVotes": 32
+      },
+      "VA": {
+          "fillKey": "Light Event(s)",
+          "electoralVotes": 32
+      },
+      "VT": {
+          "fillKey": "Event(s)",
+          "electoralVotes": 32
+      },
+      "WA": {
+          "fillKey": "Event(s)",
+          "electoralVotes": 32
+      },
+      "WV": {
+          "fillKey": "No Events",
+          "electoralVotes": 32
+      },
+      "WY": {
+          "fillKey": "No Events",
+          "electoralVotes": 32
+      },
+      "CA": {
+          "fillKey": "Event(s)",
+          "electoralVotes": 32
+      },
+      "CT": {
+          "fillKey": "Event(s)",
+          "electoralVotes": 32
+      },
+      "AK": {
+          "fillKey": "No Events",
+          "electoralVotes": 32
+      },
+      "AR": {
+          "fillKey": "No Events",
+          "electoralVotes": 32
+      },
+      "AL": {
+          "fillKey": "No Events",
+          "electoralVotes": 32
+      }
+      }
+    });
+</script>
+
+<%= result %>
