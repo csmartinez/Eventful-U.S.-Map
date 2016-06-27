@@ -16,31 +16,53 @@
  require 'rubygems'
  require 'eventful/api'
 
- result = " "
  # First, create our Eventful::API object
- eventful = Eventful::API.new 'xxxxxxx'
+ eventful = Eventful::API.new ''
+ nation_events = []
+ nation_total = []
+ states = ["Arizona", "California", "Oregon", "Seattle", "Nevada", "Idaho"]
 
-   # This is the cool part!
-   results = eventful.call 'events/search',
-                           :keywords => keyword,
-                           :location => "Arizona",
-                           :date => "Future",
-                           :page_number => 1
+   states.each do |state|
+     state_total_count = 0
+     state_events = []
+     # This is the cool part!
+     results = eventful.call 'events/search',
+                             :keywords => keyword,
+                             :location => state,
+                             :date => "Future",
+                             :page_number => 1
 
-   # If we couldn't find anything, ask the user again
-   if results['events'].nil? then
-     result += "Hmm. I couldn't find anything. Sorry."
-   end
+     # If we couldn't find anything, ask the user again
+     if results['events'].nil? then
+       result += "Hmm. I couldn't find anything. Sorry."
+     end
 
-   # Output the results
-   results['events']['event'].each do |event|
-    #  result += "http://eventful.com/events/" + event['id']
-     result += event['title']
-     result += "  at " + event['venue_name']
-     result += "  on " + event['start_time'].to_s
-     result += "________"
+     state_total_count = results['total_items']
+     nation_total.push(state_total_count)
+     # Output the results
+     results['events']['event'].each do |event|
+      #  result += "http://eventful.com/events/" + event['id']
+       result = " "
+       result += event['title']
+       result += "  at " + event['venue_name']
+       result += "  on " + event['start_time'].to_s
+       result += "________"
+       state_events.push(result)
+     end
+     nation_events.push(state_events)
    end
  %>
+<% state_color_arr = []%>
+
+<% nation_total.each do |state| %>
+  <% if state.to_i > 600 %>
+    <% state_color_arr.push("Heavy") %>
+  <% elsif state.to_i > 300 %>
+    <% state_color_arr.push("Medium") %>
+  <% else %>
+    <% state_color_arr.push("Low")%>
+  <% end %>
+<% end %>
 
 <div id="container" style="position: relative; width: 1000px; height: 600px;"></div>
 
@@ -51,222 +73,220 @@
         geographyConfig: {
         highlightBorderColor: '#bada55',
        popupTemplate: function(geography, data) {
-          return '<div class="hoverinfo">Squids'
+          return '<div class="hoverinfo">' + data.events + ' '
         },
         highlightBorderWidth: 3
       },
         fills: {
-        'No Events': '#CC4731',
-        'Event(s)': '#306596',
-        'Heavy Event(s)': '#667FAF',
-        'Light Event(s)': '#A9C0DE',
-        'Heavy No Events': '#CA5E5B',
-        'Light No Events': '#EAA9A8',
+        "Low": '#ffccff',
+        'Medium': '#ff80ff',
+        'Heavy': '#ff1aff',
+        'Nothing': '#00000',
         defaultFill: '#00000'
       },
       data:{
       "AZ": {
-          "fillKey": "No Events",
-          "electoralVotes": 5
+          "fillKey": "<%= state_color_arr[0].to_s %>",
+          "events": "<%= nation_total[0] %>" + " Events"
       },
       "CO": {
-          "fillKey": "Light Event(s)",
-          "electoralVotes": 5
+          "fillKey": "Nothing",
+          "events": 5
       },
       "DE": {
-          "fillKey": "Event(s)",
-          "electoralVotes": 32
+          "fillKey": "Nothing",
+          "events": 32
       },
       "FL": {
-          "fillKey": "UNDECIDED",
-          "electoralVotes": 29
+          "fillKey": "Nothing",
+          "events": 29
       },
       "GA": {
-          "fillKey": "No Events",
-          "electoralVotes": 32
+          "fillKey": "Nothing",
+          "events": 32
       },
       "HI": {
-          "fillKey": "Event(s)",
-          "electoralVotes": 32
+          "fillKey": "Nothing",
+          "events": 32
       },
       "ID": {
-          "fillKey": "No Events",
-          "electoralVotes": 32
+        "fillKey": "<%= state_color_arr[5].to_s %>",
+        "events": "<%= nation_total[5] %>" + " Events"
       },
       "IL": {
-          "fillKey": "Event(s)",
-          "electoralVotes": 32
+          "fillKey": "Nothing",
+          "events": 32
       },
       "IN": {
-          "fillKey": "No Events",
-          "electoralVotes": 11
+          "fillKey": "Nothing",
+          "events": 11
       },
       "IA": {
-          "fillKey": "Light Event(s)",
-          "electoralVotes": 11
+          "fillKey": "Nothing",
+          "events": 11
       },
       "KS": {
-          "fillKey": "No Events",
-          "electoralVotes": 32
+          "fillKey": "Nothing",
+          "events": 32
       },
       "KY": {
-          "fillKey": "No Events",
-          "electoralVotes": 32
+          "fillKey": "Nothing",
+          "events": 32
       },
       "LA": {
-          "fillKey": "No Events",
-          "electoralVotes": 32
+          "fillKey": "Nothing",
+          "events": 32
       },
       "MD": {
-          "fillKey": "Event(s)",
-          "electoralVotes": 32
+          "fillKey": "Nothing",
+          "events": 32
       },
       "ME": {
-          "fillKey": "Event(s)",
-          "electoralVotes": 32
+          "fillKey": "Nothing",
+          "events": 32
       },
       "MA": {
-          "fillKey": "Event(s)",
-          "electoralVotes": 32
+          "fillKey": "Nothing",
+          "events": 32
       },
       "MN": {
-          "fillKey": "Event(s)",
-          "electoralVotes": 32
+          "fillKey": "Nothing",
+          "events": 32
       },
       "MI": {
-          "fillKey": "Event(s)",
-          "electoralVotes": 32
+          "fillKey": "Nothing",
+          "events": 32
       },
       "MS": {
-          "fillKey": "No Events",
-          "electoralVotes": 32
+          "fillKey": "Nothing",
+          "events": 32
       },
       "MO": {
-          "fillKey": "No Events",
-          "electoralVotes": 13
+          "fillKey": "Nothing",
+          "events": 13
       },
       "MT": {
-          "fillKey": "No Events",
-          "electoralVotes": 32
+          "fillKey": "Nothing",
+          "events": 32
       },
       "NC": {
-          "fillKey": "Light No Events",
-          "electoralVotes": 32
+          "fillKey": "Nothing",
+          "events": 32
       },
       "NE": {
-          "fillKey": "No Events",
-          "electoralVotes": 32
+          "fillKey": "Nothing",
+          "events": 32
       },
       "NV": {
-          "fillKey": "Heavy Event(s)",
-          "electoralVotes": 32
+        "fillKey": "<%= state_color_arr[4].to_s %>",
+        "events": "<%= nation_total[4] %>" + " Events"
       },
       "NH": {
-          "fillKey": "Light Event(s)",
-          "electoralVotes": 32
+          "fillKey": "Nothing",
+          "events": 32
       },
       "NJ": {
-          "fillKey": "Event(s)",
-          "electoralVotes": 32
+          "fillKey": "Nothing",
+          "events": 32
       },
       "NY": {
-          "fillKey": "Event(s)",
-          "electoralVotes": 32
+          "fillKey": "Nothing",
+          "events": 32
       },
       "ND": {
-          "fillKey": "No Events",
-          "electoralVotes": 32
+          "fillKey": "Nothing",
+          "events": 32
       },
       "NM": {
-          "fillKey": "Event(s)",
-          "electoralVotes": 32
+          "fillKey": "Nothing",
+          "events": 32
       },
       "OH": {
-          "fillKey": "UNDECIDED",
-          "electoralVotes": 32
+          "fillKey": "Nothing",
+          "events": 32
       },
       "OK": {
-          "fillKey": "No Events",
-          "electoralVotes": 32
+          "fillKey": "Nothing",
+          "events": 32
       },
       "OR": {
-          "fillKey": "Event(s)",
-          "electoralVotes": 32
+          "fillKey": "<%= state_color_arr[2] %>",
+          "events": "<%= nation_total[2] %>" + " Events"
       },
       "PA": {
-          "fillKey": "Event(s)",
-          "electoralVotes": 32
+          "fillKey": "Nothing",
+          "events": 32
       },
       "RI": {
-          "fillKey": "Event(s)",
-          "electoralVotes": 32
+          "fillKey": "Nothing",
+          "events": 32
       },
       "SC": {
-          "fillKey": "No Events",
-          "electoralVotes": 32
+          "fillKey": "Nothing",
+          "events": 32
       },
       "SD": {
-          "fillKey": "No Events",
-          "electoralVotes": 32
+          "fillKey": "Nothing",
+          "events": 32
       },
       "TN": {
-          "fillKey": "No Events",
-          "electoralVotes": 32
+          "fillKey": "Nothing",
+          "events": 32
       },
       "TX": {
-          "fillKey": "No Events",
-          "electoralVotes": 32
+          "fillKey": "Nothing",
+          "events": 32
       },
       "UT": {
-          "fillKey": "No Events",
-          "electoralVotes": 32
+          "fillKey": "Nothing",
+          "events": 32
       },
       "WI": {
-          "fillKey": "Event(s)",
-          "electoralVotes": 32
+          "fillKey": "Nothing",
+          "events": 32
       },
       "VA": {
-          "fillKey": "Light Event(s)",
-          "electoralVotes": 32
+          "fillKey": "Nothing",
+          "events": 32
       },
       "VT": {
-          "fillKey": "Event(s)",
-          "electoralVotes": 32
+          "fillKey": "Nothing",
+          "events": 32
       },
       "WA": {
-          "fillKey": "Event(s)",
-          "electoralVotes": 32
+          "fillKey": "<%= state_color_arr[3] %>",
+          "events": "<%= nation_total[3] %>" + " Events"
       },
       "WV": {
-          "fillKey": "No Events",
-          "electoralVotes": 32
+          "fillKey": "Nothing",
+          "events": 32
       },
       "WY": {
-          "fillKey": "No Events",
-          "electoralVotes": 32
+          "fillKey": "Nothing",
+          "events": 32
       },
       "CA": {
-          "fillKey": "Event(s)",
-          "electoralVotes": 32
+          "fillKey": "<%= state_color_arr[1] %>",
+          "events": "<%= nation_total[1] %>"  + " Events"
       },
       "CT": {
-          "fillKey": "Event(s)",
-          "electoralVotes": 32
+          "fillKey": "Nothing",
+          "events": 32
       },
       "AK": {
-          "fillKey": "No Events",
-          "electoralVotes": 32
+          "fillKey": "Nothing",
+          "events": 32
       },
       "AR": {
-          "fillKey": "No Events",
-          "electoralVotes": 32
+          "fillKey": "Nothing",
+          "events": 32
       },
       "AL": {
-          "fillKey": "No Events",
-          "electoralVotes": 32
+          "fillKey": "Nothing",
+          "events": 32
       }
       }
     });
 </script>
 
-<%= result %>
+<%= nation_events.to_s %>
