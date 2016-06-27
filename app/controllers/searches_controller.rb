@@ -9,9 +9,9 @@ class SearchesController < ApplicationController
   def create
     @search = Search.new(search_params)
     if @search.save
-      redirect_to :back, notice: 'Trip was successfully created.'
+      redirect_to :back, notice: 'Search was successfully created.'
     else
-      render :index
+      render :index, notice: 'Search was unsuccessfully created.'
     end
   end
   private

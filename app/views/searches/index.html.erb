@@ -1,14 +1,48 @@
-<h1>Eventful Touring Map<small> by Carli Martinez</small></h1>
-<br>
-<%= form_for @search, url: searches_path, html: {class: "search-form", :multipart => true} do |f| %>
-      <%= f.label :name %> <%= f.text_field :name %>
-      <%= f.submit %>
-<% end %>
+<div class="navbar-form navbar-left" role="search">
+      <div class="form-group">
+        <%= form_for @search, url: searches_path, html: {class: "search-form", :multipart => true} do |f| %>
+              <%= f.label :Search_Keyword_ %> <%= f.text_field :name %>
+          </div>
+          <%= f.submit 'Submit', :class => "btn btn-primary" %>
+      <% end %>
+    </div>
+      <ul class="nav navbar-nav navbar-right">
+      <li data-toggle="modal" data-target="#myModal"><a>About</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div class="container">
+
+      <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="margin-top: 180px">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h3 class="modal-title" id="myModalLabel" style="color: #ff80ff">Eventful Event Map <small>by Carli Martinez</small></h3>
+            </div>
+            <div class="modal-body">
+              <p>Search a keyword (a musician, genre, dog show, comedian, etc.) and view how many events related
+                to that keyword are in each American state. Uses <a href="http://api.eventful.com/libs/ruby/doc/index.html">
+                  Ruby Eventful API</a>, D3.js, <a href="http://datamaps.github.io">datamaps</a> by markmarkoh,
+                Topjson, and a <a href="https://bootswatch.com/lumen/">Lumen</a> Bootswatch.<br><br>
+
+                Please note it's slow due to searches made individually by each state. More functionality
+                to come...stay tuned.</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" data-dismiss="modal">Okay</button>
+            </div>
+          </div>
+        </div>
+      </div>
 
 <% arr = [] %>
 
 <% @searches.each do |search| %>
-  <% arr.push(search.name) %>
+<% arr = [] %>
+<% arr.push(search.name) %>
 <% end %>
 
 <h1><%= keyword = arr[-1].to_s %></h1>
@@ -20,44 +54,46 @@
  eventful = Eventful::API.new ''
  nation_events = []
  nation_total = []
- states = ["Arizona", "California", "Oregon", "Seattle", "Nevada", "Idaho"]
+ states = ["Arizona0", "California1", "Oregon2", "Seattle3", "Nevada4", "Idaho5", "Montanta6", "New Mexico7",
+   "Texas8", "Missouri9", "Utah10", "Colorado11", "Minnesota12", "Wyoming13", "Michigan", "Illinois15",
+   "Indiana16", "Iowa17", "Kansas18", "Kentucky19", "Louisianna20", "Maryland21", "Delaware22",
+    "Florida23", "Georgia24", "Hawaii25", "Massachusettes26", "Tennesee27", "Iowa28", "Mississippi29",
+    "Maine30", "North Carolina31", "Nebraska32", "NewHampshire33", "NewJersey34","NorthDakota35",
+  "Ohio36", "Oklahoma37","Penn38","RH39","SC40","SD41","Wisconson42","Virginia43","Vermont44",
+"WV45","Conneticut46","Alaska47","Arkansas48","Alabama49"]
 
    states.each do |state|
-     state_total_count = 0
      state_events = []
-     # This is the cool part!
+     result = " "
      results = eventful.call 'events/search',
                              :keywords => keyword,
                              :location => state,
                              :date => "Future",
                              :page_number => 1
 
-     # If we couldn't find anything, ask the user again
      if results['events'].nil? then
        result += "Hmm. I couldn't find anything. Sorry."
-     end
+     else
 
-     state_total_count = results['total_items']
-     nation_total.push(state_total_count)
+     nation_total.push(results['total_items'])
+     counter = 0
      # Output the results
-     results['events']['event'].each do |event|
-      #  result += "http://eventful.com/events/" + event['id']
-       result = " "
-       result += event['title']
-       result += "  at " + event['venue_name']
-       result += "  on " + event['start_time'].to_s
-       result += "________"
-       state_events.push(result)
-     end
-     nation_events.push(state_events)
+     while counter <= 1 do
+        results['events']['event'].each do |event|
+            counter += 1
+            state_events.push(result)
+          end
+        nation_events.push(state_events)
+      end
    end
+  end
  %>
 <% state_color_arr = []%>
 
 <% nation_total.each do |state| %>
-  <% if state.to_i > 600 %>
+  <% if state.to_i > 100 %>
     <% state_color_arr.push("Heavy") %>
-  <% elsif state.to_i > 300 %>
+  <% elsif state.to_i > 40 %>
     <% state_color_arr.push("Medium") %>
   <% else %>
     <% state_color_arr.push("Low")%>
@@ -78,11 +114,10 @@
         highlightBorderWidth: 3
       },
         fills: {
-        "Low": '#ffccff',
+        "Low": '#ffb3ff',
         'Medium': '#ff80ff',
         'Heavy': '#ff1aff',
-        'Nothing': '#00000',
-        defaultFill: '#00000'
+        defaultFill: '#ffe6ff'
       },
       data:{
       "AZ": {
@@ -90,203 +125,201 @@
           "events": "<%= nation_total[0] %>" + " Events"
       },
       "CO": {
-          "fillKey": "Nothing",
-          "events": 5
+        "fillKey": "<%= state_color_arr[11].to_s %>",
+        "events": "<%= nation_total[11] %>" + " Events"
       },
       "DE": {
-          "fillKey": "Nothing",
-          "events": 32
+        "fillKey": "<%= state_color_arr[22].to_s %>",
+        "events": "<%= nation_total[22] %>" + " Events"
       },
       "FL": {
-          "fillKey": "Nothing",
-          "events": 29
+        "fillKey": "<%= state_color_arr[23].to_s %>",
+        "events": "<%= nation_total[23] %>" + " Events"
       },
       "GA": {
-          "fillKey": "Nothing",
-          "events": 32
+        "fillKey": "<%= state_color_arr[24].to_s %>",
+        "events": "<%= nation_total[24] %>" + " Events"
       },
       "HI": {
-          "fillKey": "Nothing",
-          "events": 32
+        "fillKey": "<%= state_color_arr[25].to_s %>",
+        "events": "<%= nation_total[25] %>" + " Events"
       },
       "ID": {
         "fillKey": "<%= state_color_arr[5].to_s %>",
         "events": "<%= nation_total[5] %>" + " Events"
       },
       "IL": {
-          "fillKey": "Nothing",
-          "events": 32
+        "fillKey": "<%= state_color_arr[15].to_s %>",
+        "events": "<%= nation_total[15] %>" + " Events"
       },
       "IN": {
-          "fillKey": "Nothing",
-          "events": 11
+        "fillKey": "<%= state_color_arr[16].to_s %>",
+        "events": "<%= nation_total[16] %>" + " Events"
       },
       "IA": {
-          "fillKey": "Nothing",
-          "events": 11
+        "fillKey": "<%= state_color_arr[28].to_s %>",
+        "events": "<%= nation_total[28] %>" + " Events"
       },
       "KS": {
-          "fillKey": "Nothing",
-          "events": 32
+        "fillKey": "<%= state_color_arr[18].to_s %>",
+        "events": "<%= nation_total[18] %>" + " Events"
       },
       "KY": {
-          "fillKey": "Nothing",
-          "events": 32
+        "fillKey": "<%= state_color_arr[19].to_s %>",
+        "events": "<%= nation_total[19] %>" + " Events"
       },
       "LA": {
-          "fillKey": "Nothing",
-          "events": 32
+        "fillKey": "<%= state_color_arr[20].to_s %>",
+        "events": "<%= nation_total[20] %>" + " Events"
       },
       "MD": {
-          "fillKey": "Nothing",
-          "events": 32
+        "fillKey": "<%= state_color_arr[21].to_s %>",
+        "events": "<%= nation_total[21] %>" + " Events"
       },
       "ME": {
-          "fillKey": "Nothing",
-          "events": 32
+        "fillKey": "<%= state_color_arr[30].to_s %>",
+        "events": "<%= nation_total[30] %>" + " Events"
       },
       "MA": {
-          "fillKey": "Nothing",
-          "events": 32
+        "fillKey": "<%= state_color_arr[26].to_s %>",
+        "events": "<%= nation_total[26] %>" + " Events"
       },
       "MN": {
-          "fillKey": "Nothing",
-          "events": 32
+        "fillKey": "<%= state_color_arr[12].to_s %>",
+        "events": "<%= nation_total[12] %>" + " Events"
       },
       "MI": {
-          "fillKey": "Nothing",
-          "events": 32
+        "fillKey": "<%= state_color_arr[14].to_s %>",
+        "events": "<%= nation_total[14] %>" + " Events"
       },
       "MS": {
-          "fillKey": "Nothing",
-          "events": 32
+        "fillKey": "<%= state_color_arr[29].to_s %>",
+        "events": "<%= nation_total[29] %>" + " Events"
       },
       "MO": {
-          "fillKey": "Nothing",
-          "events": 13
+        "fillKey": "<%= state_color_arr[9].to_s %>",
+        "events": "<%= nation_total[9] %>" + " Events"
       },
       "MT": {
-          "fillKey": "Nothing",
-          "events": 32
+        "fillKey": "<%= state_color_arr[6].to_s %>",
+        "events": "<%= nation_total[6] %>" + " Events"
       },
       "NC": {
-          "fillKey": "Nothing",
-          "events": 32
+        "fillKey": "<%= state_color_arr[31].to_s %>",
+        "events": "<%= nation_total[31] %>" + " Events"
       },
       "NE": {
-          "fillKey": "Nothing",
-          "events": 32
+        "fillKey": "<%= state_color_arr[32].to_s %>",
+        "events": "<%= nation_total[32] %>" + " Events"
       },
       "NV": {
         "fillKey": "<%= state_color_arr[4].to_s %>",
         "events": "<%= nation_total[4] %>" + " Events"
       },
       "NH": {
-          "fillKey": "Nothing",
-          "events": 32
+        "fillKey": "<%= state_color_arr[33].to_s %>",
+        "events": "<%= nation_total[33] %>" + " Events"
       },
       "NJ": {
-          "fillKey": "Nothing",
-          "events": 32
+        "fillKey": "<%= state_color_arr[34].to_s %>",
+        "events": "<%= nation_total[34] %>" + " Events"
       },
       "NY": {
-          "fillKey": "Nothing",
-          "events": 32
+        "fillKey": "<%= state_color_arr[17].to_s %>",
+        "events": "<%= nation_total[17] %>" + " Events"
       },
       "ND": {
-          "fillKey": "Nothing",
-          "events": 32
+        "fillKey": "<%= state_color_arr[34].to_s %>",
+        "events": "<%= nation_total[34] %>" + " Events"
       },
       "NM": {
-          "fillKey": "Nothing",
-          "events": 32
+        "fillKey": "<%= state_color_arr[7].to_s %>",
+        "events": "<%= nation_total[7] %>" + " Events"
       },
       "OH": {
-          "fillKey": "Nothing",
-          "events": 32
+        "fillKey": "<%= state_color_arr[36].to_s %>",
+        "events": "<%= nation_total[36] %>" + " Events"
       },
       "OK": {
-          "fillKey": "Nothing",
-          "events": 32
+        "fillKey": "<%= state_color_arr[37].to_s %>",
+        "events": "<%= nation_total[37] %>" + " Events"
       },
       "OR": {
           "fillKey": "<%= state_color_arr[2] %>",
           "events": "<%= nation_total[2] %>" + " Events"
       },
       "PA": {
-          "fillKey": "Nothing",
-          "events": 32
+        "fillKey": "<%= state_color_arr[38].to_s %>",
+        "events": "<%= nation_total[38] %>" + " Events"
       },
       "RI": {
-          "fillKey": "Nothing",
-          "events": 32
+        "fillKey": "<%= state_color_arr[39].to_s %>",
+        "events": "<%= nation_total[39] %>" + " Events"
       },
       "SC": {
-          "fillKey": "Nothing",
-          "events": 32
+        "fillKey": "<%= state_color_arr[40].to_s %>",
+        "events": "<%= nation_total[40] %>" + " Events"
       },
       "SD": {
-          "fillKey": "Nothing",
-          "events": 32
+        "fillKey": "<%= state_color_arr[41].to_s %>",
+        "events": "<%= nation_total[41] %>" + " Events"
       },
       "TN": {
-          "fillKey": "Nothing",
-          "events": 32
+        "fillKey": "<%= state_color_arr[27].to_s %>",
+        "events": "<%= nation_total[27] %>" + " Events"
       },
       "TX": {
-          "fillKey": "Nothing",
-          "events": 32
+        "fillKey": "<%= state_color_arr[8].to_s %>",
+        "events": "<%= nation_total[8] %>" + " Events"
       },
       "UT": {
-          "fillKey": "Nothing",
-          "events": 32
+        "fillKey": "<%= state_color_arr[10].to_s %>",
+        "events": "<%= nation_total[10] %>" + " Events"
       },
       "WI": {
-          "fillKey": "Nothing",
-          "events": 32
+        "fillKey": "<%= state_color_arr[42].to_s %>",
+        "events": "<%= nation_total[42] %>" + " Events"
       },
       "VA": {
-          "fillKey": "Nothing",
-          "events": 32
+        "fillKey": "<%= state_color_arr[43].to_s %>",
+        "events": "<%= nation_total[43] %>" + " Events"
       },
       "VT": {
-          "fillKey": "Nothing",
-          "events": 32
+        "fillKey": "<%= state_color_arr[44].to_s %>",
+        "events": "<%= nation_total[44] %>" + " Events"
       },
       "WA": {
           "fillKey": "<%= state_color_arr[3] %>",
           "events": "<%= nation_total[3] %>" + " Events"
       },
       "WV": {
-          "fillKey": "Nothing",
-          "events": 32
+        "fillKey": "<%= state_color_arr[45] %>",
+        "events": "<%= nation_total[45] %>" + " Events"
       },
       "WY": {
-          "fillKey": "Nothing",
-          "events": 32
+        "fillKey": "<%= state_color_arr[13] %>",
+        "events": "<%= nation_total[13] %>"  + " Events"
       },
       "CA": {
           "fillKey": "<%= state_color_arr[1] %>",
           "events": "<%= nation_total[1] %>"  + " Events"
       },
       "CT": {
-          "fillKey": "Nothing",
-          "events": 32
+        "fillKey": "<%= state_color_arr[46] %>",
+        "events": "<%= nation_total[46] %>"  + " Events"
       },
       "AK": {
-          "fillKey": "Nothing",
-          "events": 32
+        "fillKey": "<%= state_color_arr[47] %>",
+        "events": "<%= nation_total[47] %>"  + " Events"
       },
       "AR": {
-          "fillKey": "Nothing",
-          "events": 32
+        "fillKey": "<%= state_color_arr[48] %>",
+        "events": "<%= nation_total[48] %>"  + " Events"
       },
       "AL": {
-          "fillKey": "Nothing",
-          "events": 32
+        "fillKey": "<%= state_color_arr[49] %>",
+        "events": "<%= nation_total[49] %>"  + " Events"
       }
       }
     });
 </script>
-
-<%= nation_events.to_s %>
