@@ -54,7 +54,7 @@
  eventful = Eventful::API.new '8WnSwHfBrTmGP4mj'
  nation_events = []
  nation_total = []
- states = ["Arizona0", "California1"]
+ states = ["Arizona0"]
 
    states.each do |state|
      state_events = []
@@ -100,11 +100,23 @@
     var map = new Datamap({
         element: document.getElementById('container'),
         scope: 'usa',
+        done: function(datamap) {
+            datamap.svg.selectAll('.datamaps-subunit').on('click', function(geography) {
+              var div = document.getElementById("info");
+              if (div.style.display !== 'none') {
+                  div.style.display = 'none';
+              }
+              else {
+                  div.style.display = 'block';
+              }
+            });
+        },
         geographyConfig: {
         highlightBorderColor: '#937B76',
         highlightFillColor: '#A28F8B',
        popupTemplate: function(geography, data) {
-          return '<div class="hoverinfo">' + data.events + ' '
+          return '<div ng-click="myFunc()" class="hoverinfo">' + data.events +
+          ''
         },
         highlightBorderWidth: 3
       },
@@ -117,15 +129,18 @@
       data:{
       "AZ": {
           "fillKey": "<%= state_color_arr[0].to_s %>",
-          "events": "<%= nation_total[0] %>" + " Events"
+          "events": "<%= nation_total[0] %>" + " Events",
+          "state": "AZ"
       },
       "CO": {
         "fillKey": "<%= state_color_arr[11].to_s %>",
-        "events": "<%= nation_total[11] %>" + " Events"
+        "events": "<%= nation_total[11] %>" + " Events",
+        "state": "CO"
       },
       "DE": {
         "fillKey": "<%= state_color_arr[22].to_s %>",
-        "events": "<%= nation_total[22] %>" + " Events"
+        "events": "<%= nation_total[22] %>" + " Events",
+        "state": "DE"
       },
       "FL": {
         "fillKey": "<%= state_color_arr[18].to_s %>",
@@ -318,3 +333,29 @@
       }
     });
 </script>
+
+<!-- <div ng-app="myApp" ng-controller="myCtrl">
+
+<button ng-click="myFunc()">Click Me!</button>
+
+<div ng-show="showMe">
+    <h1>Menu:</h1>
+    <div>Pizza</div>
+    <div>Pasta</div>
+    <div>Pesce</div>
+</div>
+
+</div>
+<script>
+var app = angular.module('myApp', []);
+app.controller('myCtrl', function($scope) {
+    $scope.showMe = false;
+    $scope.myFunc = function() {
+        $scope.showMe = !$scope.showMe;
+    }
+});
+</script> -->
+
+<div id="info"  style="display:none;" class="answer_list" >
+<p>AZ yoooo</p><script>document.write(MyApp.color)</script>
+</div>

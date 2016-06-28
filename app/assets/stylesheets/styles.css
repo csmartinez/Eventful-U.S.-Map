@@ -6,3 +6,10 @@
     background-color: #ff80ff;
     border-color: #ffb3ff;
 }
+
+.cats {
+  color: black;
+  float: right;
+  size: 20pt;
+  position: static;
+}
