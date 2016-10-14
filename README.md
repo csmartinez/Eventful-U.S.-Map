@@ -7,7 +7,7 @@ Search for a performer or specific type of event to see which states host that p
 
 * [Carli Martinez](https://github.com/csmartinez)
 
-![screenshot](https://cloud.githubusercontent.com/assets/10466251/19377076/10bb7b4c-9198-11e6-9246-2da049e51058.png)
+![screenshot](https://cloud.githubusercontent.com/assets/10466251/19377145/99f20098-9198-11e6-9bf7-3bd7c897285f.png)
 
 ##Known Issues
 
