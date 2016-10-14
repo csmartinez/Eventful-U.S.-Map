@@ -54,8 +54,15 @@
  eventful = Eventful::API.new '8WnSwHfBrTmGP4mj'
  nation_events = []
  nation_total = []
- states = ["Arizona0", "California1", "Colorado11", "Delaware22", "Florida18", "Georgia24",
-            "Hawaii25", "Idaho5", "Illinois15", "Indiana16", "Alaska47"]
+ states = ["Arizona0", "California1", "Oregon2", "Washington3", "Nevada4", "Idaho5","Montana6",
+            "NewMexico7", "Texas8", "Missouri9", "Utah10", "Colorado11", "Minnesota12",
+            "Wyoming13", "Michigan14", "Illinois15", "Indiana16", "NewYork17", "Florida18", "Kentucky19",
+            "Louisiana20", "Maryland21", "Delaware22", "Kansas23", "Georgia24",
+            "Hawaii25", "Massachusetts26", "Tennessee27", "Iowa28",
+            "Mississippi29", "Maine30", "NorthCarolina31", "Nebraska32", "NewHampshire33",
+            "NorthDakota34",  "NewJersey35","Ohio36", "Oklahoma37", "Pennsylvania38", "RhodeIsland39", "SouthCarolina40", "SouthDakota41",
+             "Wisconsin42", "Virginia43", "Vermont44", "WestVirginia45", "Connecticut46",
+            "Alaska47", "Alabama49", "Arkansas48" ]
 
    states.each do |state|
      state_events = []
@@ -232,8 +239,8 @@
         "events": "<%= nation_total[33] %>" + " Events"
       },
       "NJ": {
-        "fillKey": "<%= state_color_arr[34].to_s %>",
-        "events": "<%= nation_total[34] %>" + " Events"
+        "fillKey": "<%= state_color_arr[35].to_s %>",
+        "events": "<%= nation_total[35] %>" + " Events"
       },
       "NY": {
         "fillKey": "<%= state_color_arr[17].to_s %>",
