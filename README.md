@@ -1,10 +1,11 @@
 #Eventful U.S. Map
 
+
+Search for a performer or specific type of event to see which states host that performer/event the most, where and when. Uses Eventful API. Built with Ruby on Rails
+
 ##Contributors
 
 * [Carli Martinez](https://github.com/csmartinez)
-
-Search for a performer or specific type of event to see which states host that performer/event the most, where and when. Uses Eventful API. Built with Ruby on Rails
 
 ![screenshot](https://cloud.githubusercontent.com/assets/10466251/19377076/10bb7b4c-9198-11e6-9246-2da049e51058.png)
 
